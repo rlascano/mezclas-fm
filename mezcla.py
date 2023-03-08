@@ -13,7 +13,6 @@ class Mezcla:
         self.concentracion_concentrado = concentracion_concentrado
         self.concentracion_diluido = concentracion_diluido
         self.densidades = Densidad()
-
     
     @property
     def tanque(self):
@@ -76,7 +75,6 @@ class Mezcla:
         return medida * \
                 self.densidades.obtener_densidad(concentracion) * \
                 self.tanque.litros_por_cm    
-
     
     #I will refactor this later ♪♪♪
     def kilos_concentrado(self):
@@ -105,18 +103,14 @@ class Mezcla:
         return self.kilos_diluido() / self.densidades.obtener_densidad(self.concentracion_diluido) / self.tanque.litros_por_cm
 
     def cm_final(self):
-        cm_totales = self.medida_inicial + self.cm_diluido() + self.cm_concentrado()
-        prop = 1 / ((self.cm_diluido() / self.cm_concentrado()) + 1) 
+        cm_diluido = self.cm_diluido()
+        cm_concentrado = self.cm_concentrado()
+        cm_totales = self.medida_inicial + cm_diluido + cm_concentrado
+        prop = 1 / ((cm_diluido / cm_concentrado) + 1) 
         dil_corr = (cm_totales - self.medida_final) * (1 - prop)    
         conc_corr = (cm_totales - self.medida_final) * prop
 
-        cm_diluido_final = round(self.cm_diluido() - dil_corr + self.medida_inicial, 2)
-        cm_completar = round(cm_diluido_final + self.cm_concentrado() - conc_corr, 2)
+        cm_diluido_final = round(cm_diluido - dil_corr + self.medida_inicial, 2)
+        cm_completar = round(cm_diluido_final + cm_concentrado - conc_corr, 2)
 
         return cm_diluido_final, cm_completar
-
-
-
-mezcla = Mezcla(0, 0, 112.6192663169, 65.0, 98.0, 50.0)
-cm_dil, cm_conc = mezcla.cm_final()
-print(f'{cm_dil} {cm_conc}')
