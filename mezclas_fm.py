@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from mezclas_cm import MezclaCm
 from mezclas_kg import MezclaKg
+from mezclas_corregir import MezclaCorregir
 
 class App(tk.Tk):
    #I will refactor this later
@@ -20,6 +21,9 @@ class App(tk.Tk):
 
       self.mezclas_kg = MezclaKg(self.notebook)
       self.notebook.add(self.mezclas_kg, text="Mezcla con Kg", padding=10)
+
+      self.mezclas_corregir = MezclaCorregir(self.notebook)
+      self.notebook.add(self.mezclas_corregir, text="Corregir", padding=10)
 
       self.notebook.pack(padx=10, pady=10)
       #self.pack()

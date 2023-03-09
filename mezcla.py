@@ -125,3 +125,11 @@ class Mezcla:
         cm_completar = round(cm_diluido_final + cm_concentrado - conc_corr, 2)
 
         return cm_diluido_final, cm_completar
+
+    def corregir(self):
+        kg_inicial = self.cm_a_kg(self.medida_inicial, float(self.concentracion_inicial))
+        aux = kg_inicial * (self.concentracion_concentrado - self.concentracion_inicial) / (self.concentracion_concentrado - self.concentracion_deseada)
+        aux_1 = aux * (self.concentracion_inicial - self.concentracion_deseada) / (self.concentracion_inicial - self.concentracion_concentrado)
+        cm = aux_1 / self.densidades.obtener_densidad(self.concentracion_concentrado) / self.tanque.litros_por_cm
+        return cm
+        
