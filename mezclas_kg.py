@@ -10,20 +10,25 @@ class MezclaKg(ttk.Frame):
       super().__init__(*args, **kwargs)
 
       self.mezcla = Mezcla(0, 0, 0, 0, 0, 0)    
-      self.mezcla.tanque = Tanque(28, 178.7
-                                  )  
-      ttk.Label(self, text='Medida inicial').grid(column=2, row=1, sticky=W)
+
+      ttk.Label(self, text='Tanque').grid(column=2, row=1, sticky=W)
+      self.tanque_combo = ttk.Combobox(self, width=40, state='readonly', values=['19', '28'])
+      self.tanque_combo.grid(column=3, row=1, sticky=W)  
+
+      ttk.Label(self, text='Medida inicial').grid(column=2, row=2, sticky=W)
       self.medida_inicial = StringVar()
       self.medida_inicial_entry = ttk.Entry(self, width=20, textvariable=self.medida_inicial)
-      self.medida_inicial_entry.grid(column=3, row=1, sticky=(W, E))
-      ttk.Label(self, text='Concentracion inicial').grid(column=2, row=2, sticky=W)
+      self.medida_inicial_entry.grid(column=3, row=2, sticky=(W, E))
+
+      ttk.Label(self, text='Concentracion inicial').grid(column=2, row=3, sticky=W)
       self.conc_inicial = StringVar()
       self.conc_inicial_entry = ttk.Entry(self, width=20, textvariable=self.conc_inicial)
-      self.conc_inicial_entry.grid(column=3, row=2, sticky=(W, E))
-      self.mf_label = ttk.Label(self, text='Kilogramos finales').grid(column=2, row=3, sticky=W)
+      self.conc_inicial_entry.grid(column=3, row=3, sticky=(W, E))
+
+      self.mf_label = ttk.Label(self, text='Kilogramos finales').grid(column=2, row=4, sticky=W)
       self.medida_final = StringVar()
       self.medida_final_entry = ttk.Entry(self, width=20, textvariable=self.medida_final)
-      self.medida_final_entry.grid(column=3, row=3, sticky=(W, E))
+      self.medida_final_entry.grid(column=3, row=4, sticky=(W, E))
       
       ttk.Label(self, text='Concentracion deseada').grid(column=2, row=5, sticky=W)
       self.conc_deseada = StringVar()
@@ -55,6 +60,12 @@ class MezclaKg(ttk.Frame):
       self.bind("<Return>", self.calcular)   
 
    def calcular(self):
+      tanque = self.tanque_combo.get()
+      if tanque == '19':
+         self.mezcla.tanque = Tanque(19, 68.0)
+      else: 
+         self.mezcla.tanque = Tanque(28, 178.7)
+         
       self.mezcla.medida_inicial = float(self.medida_inicial.get())
       self.mezcla.concentracion_inicial = float(self.conc_inicial.get())
       self.mezcla.medida_final = float(self.medida_final.get())
