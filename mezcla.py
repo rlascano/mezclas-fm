@@ -77,9 +77,12 @@ class Mezcla:
                 self.tanque.litros_por_cm    
     
     #I will refactor this later ♪♪♪
-    def kilos_concentrado(self):
+    def kilos_concentrado(self, unidad):
         kg_inicial = self.cm_a_kg(self.medida_inicial, float(self.concentracion_inicial))
-        kg_final = self.cm_a_kg(self.medida_final, float(self.concentracion_deseada))           
+        if unidad == 'cm':
+            kg_final = self.cm_a_kg(self.medida_final, float(self.concentracion_deseada))  
+        else:
+            kg_final = float(self.medida_final)             
 
         num = (kg_final * self.concentracion_deseada - kg_inicial * self.concentracion_inicial -
                self.concentracion_diluido * kg_final + self.concentracion_diluido * kg_inicial)
@@ -87,28 +90,36 @@ class Mezcla:
         return num/den
     
     #I will refactor this later ♪♪♪
-    def kilos_diluido(self):
+    def kilos_diluido(self, unidad):
         kg_inicial = self.cm_a_kg(self.medida_inicial, float(self.concentracion_inicial))
-        kg_final = self.cm_a_kg(self.medida_final, float(self.concentracion_deseada)) 
+        if unidad == 'cm':
+            kg_final = self.cm_a_kg(self.medida_final, float(self.concentracion_deseada)) 
+        else: 
+            kg_final = float(self.medida_final)
 
         num = (self.concentracion_concentrado * kg_final - self.concentracion_concentrado * kg_inicial -
                kg_final * self.concentracion_deseada + kg_inicial * self.concentracion_inicial)
         den = self.concentracion_concentrado - self.concentracion_diluido 
         return num/den
 
-    def cm_concentrado(self):
-        return self.kilos_concentrado() / self.densidades.obtener_densidad(self.concentracion_concentrado) / self.tanque.litros_por_cm
+    def cm_concentrado(self, unidad):
+        return self.kilos_concentrado(unidad) / self.densidades.obtener_densidad(self.concentracion_concentrado) / self.tanque.litros_por_cm
 
-    def cm_diluido(self):        
-        return self.kilos_diluido() / self.densidades.obtener_densidad(self.concentracion_diluido) / self.tanque.litros_por_cm
+    def cm_diluido(self, unidad):        
+        return self.kilos_diluido(unidad) / self.densidades.obtener_densidad(self.concentracion_diluido) / self.tanque.litros_por_cm
 
-    def cm_final(self):
-        cm_diluido = self.cm_diluido()
-        cm_concentrado = self.cm_concentrado()
+    def cm_final(self, unidad):
+        if unidad == 'cm':
+            medida_final = self.medida_final
+        else:
+            medida_final = self.medida_final / self.densidades.obtener_densidad(self.concentracion_deseada) / self.tanque.litros_por_cm    
+        
+        cm_diluido = self.cm_diluido(unidad)
+        cm_concentrado = self.cm_concentrado(unidad)
         cm_totales = self.medida_inicial + cm_diluido + cm_concentrado
         prop = 1 / ((cm_diluido / cm_concentrado) + 1) 
-        dil_corr = (cm_totales - self.medida_final) * (1 - prop)    
-        conc_corr = (cm_totales - self.medida_final) * prop
+        dil_corr = (cm_totales - medida_final) * (1 - prop)    
+        conc_corr = (cm_totales - medida_final) * prop
 
         cm_diluido_final = round(cm_diluido - dil_corr + self.medida_inicial, 2)
         cm_completar = round(cm_diluido_final + cm_concentrado - conc_corr, 2)
