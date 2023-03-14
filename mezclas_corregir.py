@@ -36,10 +36,14 @@ class MezclaCorregir(ttk.Frame):
       self.conc_concentrado_entry = ttk.Entry(self, width=20, textvariable=self.conc_concentrado, justify=tk.RIGHT)
       self.conc_concentrado_entry.grid(column=3, row=5, sticky=(W, E))        
 
-      ttk.Button(self, text='Calcular', command=self.calcular, padding=(24, 12)).grid(column=3, row=6, sticky=E)
+      style = ttk.Style()
+      style.configure('W.TButton', background='blue', foreground='#ddd', font=('calibri', 10, 'bold'))
+      style.map('W.TButton', foreground = [('active', '!disabled', '#ddd')],
+                     background = [('active', 'darkblue')])
+      ttk.Button(self, text='Calcular', command=self.calcular, padding=(24, 12), style='W.TButton').grid(column=3, row=6, sticky=E)
 
       self.res = StringVar()
-      ttk.Label(self, textvariable=self.res).grid(column=2, row=7, columnspan = 2, sticky=(W, E))
+      ttk.Label(self, textvariable=self.res, foreground='blue', font=('calibri', 10, 'bold')).grid(column=2, row=10, columnspan = 2, sticky=(W, E))
 
       for child in self.winfo_children():
            child.grid_configure(padx=5, pady=8)
